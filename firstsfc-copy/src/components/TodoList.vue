@@ -6,7 +6,7 @@
 
    <div className="container">
       <div className="header">
-         <button className="top-add-todo-button" onClick="{handleShow}">Add Todo</button>
+         <button className="top-add-todo-button" v-on:click="handleShow" onClick="{handleShow}">Add Todo</button>
          <TodoHero completedTasks={completedTasks} totalTasks="{totalTasks}" />
          <div className="filter-container">
             <select className="filter-select" onChange="{handleFilterChange}">
@@ -35,7 +35,7 @@
          ))}
          <div className="footerButtonContainer">
             <div className="footerButtonContainerLeft">
-               <button className="add-todo-button-footer" onClick="setShowModal(true)">Add Todo</button>
+               <button className="add-todo-button-footer" @:click="handleShow" onClick="setShowModal(true)">Add Todo</button>
             </div>
             <div className="footerButtonContainerRight">
                <button className="load-default-todos-button" onClick="loadDefaultTasks(defaultTasks)">
@@ -67,7 +67,13 @@ export default {
          
       }
    },
+   // Methods are functions that belong to the vue instance under the 'methods' property
+   // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
    methods: {
+      handleShow() {
+         // setShowModal(true);
+         alert('handleShow');
+      }
    }
 }
 </script>

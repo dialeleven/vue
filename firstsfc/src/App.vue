@@ -1,17 +1,3 @@
-<script>
-export default {
-   data() {
-      return {
-         message: 'This is some text'
-      }
-   },
-   methods: {
-      alertUser(text) {
-         alert('Hello ' + text);}
-   }
-}
-</script>
-
 <template>
    <h1>Food</h1>
    <button v-on:click="alertUser('World!')">Click me</button>
@@ -29,6 +15,20 @@ export default {
          v-bind:is-favorite="false" />
    </div>
 </template>
+
+<script>
+export default {
+   data() {
+      return {
+         message: 'This is some text'
+      }
+   },
+   methods: {
+      alertUser(text) {
+         alert('Hello ' + text);}
+   }
+}
+</script>
 
 <style>
 #wrapper {
