@@ -22,18 +22,18 @@
             editItemModal={editItemModal}
                />
          <ol>
-            <li v-for="task in tasks">
+            <li v-for="task in tasks" v-bind:key="task.id">
                {{ task }}
             </li>
          </ol>
          
-               <!-- {{ task.id }} {{ task.text }} {{ task.duedate }} {{ task.completed }} {{ task.position }} -->
+         <!-- {{ task.id }} {{ task.text }} {{ task.duedate }} {{ task.completed }} {{ task.position }} -->
          <div className="footerButtonContainer">
             <div className="footerButtonContainerLeft">
                <button className="add-todo-button-footer" @:click="handleShow">Add Todo</button>
             </div>
             <div className="footerButtonContainerRight">
-               <button className="load-default-todos-button" v-on:click="loadDefaultTasks(defaultTasks)">
+               <button className="load-default-todos-button" v-on:click="loadDefaultTasks">
                   Load Default Tasks (Reset LocalStorage)
                </button>
             </div>
@@ -77,7 +77,40 @@ export default {
    
    data() {
       return {
-         tasks: [
+         tasks: []
+      }
+   },
+
+   computed: {
+      completedTasks() {
+         return this.tasks.filter(task => task.completed).length
+      },
+      
+      totalTasks() {
+         return this.tasks.length;
+      }
+   },
+   
+   // mounted lifecycle hook happens after the Vue component is mounted to the DOM
+   mounted() {
+      // initialize tasks array from local storage or default tasks array
+      this.loadDefaultTasks();
+   },
+
+   // Methods are functions that belong to the vue instance under the 'methods' property
+   // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
+   methods: {
+      handleShow() {
+         // setShowModal(true);
+         alert('handleShow');
+      },
+
+      handleFilterChange(e) {
+         alert('handleFilterChange, event value: ' + e.target.value);
+      },
+
+      loadDefaultTasks() {
+         const defaultTasks = [
             {
                id: 1,
                text: "Edit item  - watch out for long text lines that wrap",
@@ -99,36 +132,18 @@ export default {
                completed: false,
                position: 3
             }
-         ]
-      }
-   },
+         ];
 
-   computed: {
-      completedTasks() {
-         return this.tasks.filter(task => task.completed).length
-      },
-      
-      totalTasks() {
-         return this.tasks.length;
-      }
-   },
+         const savedTasks = JSON.parse(localStorage.getItem('tasks'));
 
-   // Methods are functions that belong to the vue instance under the 'methods' property
-   // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
-   methods: {
-      handleShow() {
-         // setShowModal(true);
-         alert('handleShow');
-      },
-
-      handleFilterChange(e) {
-         alert('handleFilterChange, event value: ' + e.target.value);
-      },
-
-      loadDefaultTasks(defaultTasks) {
-         this.tasks = defaultTasks;
-
-         alert('loadDefaultTasks');
+         if (savedTasks && savedTasks.length) {
+            this.tasks = savedTasks;
+         } else {
+            this.tasks = defaultTasks;
+            //alert('loadDefaultTasks from array');
+         }
+         this.totalTasks = this.tasks.length;
+         this.completedTasks = this.tasks.filter(task => task.completed).length;
       }
    }
 };
