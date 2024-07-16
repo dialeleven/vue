@@ -5,10 +5,10 @@
 
    <div className="container">
       <div className="header">
-         <button className="top-add-todo-button" v-on:click="handleShow" onClick="{handleShow}">Add Todo</button>
+         <button className="top-add-todo-button" v-on:click="handleShow">Add Todo</button>
          <TodoHero completedTasks={completedTasks} totalTasks="{totalTasks}" />
          <div className="filter-container">
-            <select className="filter-select" v-on:change="handleFilterChange($event)" onChange="{handleFilterChange}">
+            <select className="filter-select" v-on:change="handleFilterChange($event)">
                <option value="tasks-all">All</option>
                <option value="tasks-checked">Checked</option>
                <option value="tasks-unchecked">Unchecked</option>
@@ -17,15 +17,7 @@
       </div>
       
       <div className="todo-list">
-         <ol>
-            <li v-for="task in tasks">{{ task }}</li>
-         </ol>
-      <SortableContext
-         items="{tasks}"
-         strategy="{verticalListSortingStrategy}"
-         >
-         {getFilteredTasks().map(task => (
-               <TodoItem
+         <TodoItem
                   key={task.id}
                   task={task}
                   deleteTask={deleteTask}
@@ -33,18 +25,23 @@
                   updateTask={updateTask}
                   editItemModal={editItemModal}
                />
-         ))}
+         <ol>
+            <li v-for="task in tasks">
+               {{ task }}
+            </li>
+         </ol>
+         
+               <!-- {{ task.id }} {{ task.text }} {{ task.duedate }} {{ task.completed }} {{ task.position }} -->
          <div className="footerButtonContainer">
             <div className="footerButtonContainerLeft">
-               <button className="add-todo-button-footer" @:click="handleShow" onClick="setShowModal(true)">Add Todo</button>
+               <button className="add-todo-button-footer" @:click="handleShow">Add Todo</button>
             </div>
             <div className="footerButtonContainerRight">
-               <button className="load-default-todos-button" onClick="loadDefaultTasks(defaultTasks)">
+               <button className="load-default-todos-button" v-on:click="loadDefaultTasks(defaultTasks)">
                   Load Default Tasks (Reset LocalStorage)
                </button>
             </div>
          </div>
-         </SortableContext>
       </div>
       
       <TodoAddItemModal
@@ -107,6 +104,12 @@ export default {
 
       handleFilterChange(e) {
          alert('handleFilterChange, event value: ' + e.target.value);
+      },
+
+      loadDefaultTasks(defaultTasks) {
+         this.tasks = defaultTasks;
+
+         alert('loadDefaultTasks');
       }
    }
 }

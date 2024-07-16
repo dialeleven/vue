@@ -28,8 +28,8 @@
 
 <script>
 export default {
-   name: 'TodoItem',
-   props: ['task', 'deleteTask', 'toggleCompleted', 'updateTask', 'editItemModal']
+   name: 'TodoItem'
+   // props: ['task', 'deleteTask', 'toggleCompleted', 'updateTask', 'editItemModal']
 }
 </script>
 
