@@ -1,12 +1,8 @@
 <template>
-   <div>
-      My TodoList from TodoList.vue
-   </div>
-
    <div className="container">
       <div className="header">
          <button className="top-add-todo-button" v-on:click="handleShow">Add Todo</button>
-         <TodoHero completedTasks={completedTasks} totalTasks="{totalTasks}" />
+         <TodoHero v-bind:completedTasks="completedTasks" v-bind:totalTasks="totalTasks" />
          <div className="filter-container">
             <select className="filter-select" v-on:change="handleFilterChange($event)">
                <option value="tasks-all">All</option>
@@ -18,12 +14,12 @@
       
       <div className="todo-list">
          <TodoItem
-                  key={task.id}
-                  task={task}
-                  deleteTask={deleteTask}
-                  toggleCompleted={toggleCompletedAnonFunc}
-                  updateTask={updateTask}
-                  editItemModal={editItemModal}
+            key={task.id}
+            task={task}
+            deleteTask={deleteTask}
+            toggleCompleted={toggleCompletedAnonFunc}
+            updateTask={updateTask}
+            editItemModal={editItemModal}
                />
          <ol>
             <li v-for="task in tasks">
@@ -57,14 +53,26 @@
 
 <script>
 import TodoItem from './TodoItem.vue';
+import TodoHero from './TodoHero.vue';
 
 export default {
-   // components: {
+   // register our components
+   components: {
    //    TodoItem
-   // },
+      TodoHero
+   },
 
    // props: ['foodName', 'foodDesc', 'isFavorite']
    props: {
+      totalTasks: {
+         type: Number,
+         required: true
+      },
+
+      completedTasks: {
+         type: Number,
+         required: true
+      }
    },
    
    data() {
@@ -94,6 +102,18 @@ export default {
          ]
       }
    },
+
+   computed: {
+      completedTasks() {
+         return this.tasks.filter(task => task.completed).length
+      },
+      
+      totalTasks() {
+         return this.tasks.length;
+      }
+
+   },
+
    // Methods are functions that belong to the vue instance under the 'methods' property
    // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
    methods: {
@@ -112,7 +132,7 @@ export default {
          alert('loadDefaultTasks');
       }
    }
-}
+};
 </script>
 
 <style>
