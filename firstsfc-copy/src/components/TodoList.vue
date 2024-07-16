@@ -111,7 +111,6 @@ export default {
       totalTasks() {
          return this.tasks.length;
       }
-
    },
 
    // Methods are functions that belong to the vue instance under the 'methods' property
