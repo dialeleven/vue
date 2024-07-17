@@ -1,13 +1,13 @@
 <template>
-   <div v-for="task in tasks" ref={setNodeRef} style={style} {...attributes}  className="todo-item">
-      <span {...listeners} className="drag-handle">☰</span>
+   <div className="todo-item">
+      <span className="drag-handle">☰</span>
       <div className="todo-content">
          <input type="checkbox" checked={task.completed} onChange={handleChange} />
          <div className="todo-text-container">
             <div className="todo-text">
-               {task.text}
+               {{task.text}}
             </div>
-            <div className="due-date">{task.duedate}</div>
+            <div className="due-date">{{task.duedate}}</div>
          </div>
          <button className="edit-button" onClick={editItemModal2}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16" alt="Edit">
@@ -28,13 +28,48 @@
 
 <script>
 export default {
-   name: 'TodoItem'
+   name: 'TodoItem',
    // props: ['task', 'deleteTask', 'toggleCompleted', 'updateTask', 'editItemModal']
+
+   props: {
+      task: {
+         type: Array,
+         required: true
+      }
+   },
+
+   mounted() {
+      //alert('app mounted, task: ', this.task);
+   },
+
+
+   methods: {
+
+      // function to toggle the completion status of a todo item
+      handleChange() {
+         this.toggleCompleted(this.task.id);
+      },
+
+      // confirm todo deletion and call deleteTask() if confirmed
+      handleDelete() {
+         if (window.confirm(`Delete todo: ${this.task.text}?`))
+            this.deleteTask(this.task.id);
+      },
+
+      // user clicks the edit button to edit the todo item
+      editItemModal2() {
+         //alert('hi');
+         // console.log(this.task.id);
+         // console.log(this.task.text);
+         // console.log(this.task.duedate);
+         // console.log('task in editItemModal2: ', this.task);
+         this.editItemModal(this.task.id);
+      }
+   }
 }
 </script>
 
-<style>
-</style>
+<style></style>
 
 <!-- import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';

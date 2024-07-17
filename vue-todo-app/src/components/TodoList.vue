@@ -1,10 +1,12 @@
 <template>
-   <div className="container">
-      <div className="header">
-         <button className="top-add-todo-button" v-on:click="handleShow">Add Todo</button>
-         <TodoHero v-bind:completedTasks="completedTasks" v-bind:totalTasks="totalTasks" />
-         <div className="filter-container">
-            <select className="filter-select" v-on:change="handleFilterChange($event)">
+   <div class="container">
+      <div class="header">
+         <button class="top-add-todo-button" @click="handleShow">Add Todo</button>
+
+         <TodoHero :completedTasks="completedTasks" :totalTasks="totalTasks" />
+
+         <div class="filter-container">
+            <select class="filter-select" @change="handleFilterChange($event)">
                <option value="tasks-all">All</option>
                <option value="tasks-checked">Checked</option>
                <option value="tasks-unchecked">Unchecked</option>
@@ -12,42 +14,50 @@
          </div>
       </div>
       
-      <div className="todo-list">
-         <TodoItem
+      <div class="todo-list">
+         
+         <!-- <TodoItem
             key={task.id}
             task={task}
             deleteTask={deleteTask}
             toggleCompleted={toggleCompletedAnonFunc}
             updateTask={updateTask}
-            editItemModal={editItemModal}
-               />
-         <ol>
+            editItemModal={editItemModal} /> -->
+         
+         <!-- <ol>
             <li v-for="task in tasks" v-bind:key="task.id">
-               {{ task }}
+               {{ task.text }} <small>{{ task }}</small>
             </li>
-         </ol>
+         </ol> -->
+
+         <!-- <TodoItem :task="task" /> -->
+         <TodoItem v-for="task in tasks" :key="task.id" :task="task" />
+
+         <!--
+         <TodoItem v-for="task in tasks" :key="task.id" :task="task" />
+         -->
          
          <!-- {{ task.id }} {{ task.text }} {{ task.duedate }} {{ task.completed }} {{ task.position }} -->
-         <div className="footerButtonContainer">
-            <div className="footerButtonContainerLeft">
-               <button className="add-todo-button-footer" @:click="handleShow">Add Todo</button>
+         <div class="footerButtonContainer">
+            <div class="footerButtonContainerLeft">
+               <button class="add-todo-button-footer" @click="handleShow">Add Todo</button>
             </div>
-            <div className="footerButtonContainerRight">
-               <button className="load-default-todos-button" v-on:click="loadDefaultTasks">
+            <div class="footerButtonContainerRight">
+               <button class="load-default-todos-button" value="Load" @click="loadDefaultTasks($event)">
                   Load Default Tasks (Reset LocalStorage)
                </button>
             </div>
          </div>
       </div>
-      
+<!--       
       <TodoAddItemModal
-         showModal={showModal}
-         handleClose={handleClose}
-         addTask={addTask}
-         updateTask={updateTask}
-         addEditMode={addEditMode}
-         currentTaskId={currentTaskId}
-      />
+         :showModal="showModal"
+         @handleClose="handleClose"
+         @addTask="addTask"
+         @updateTask="updateTask"
+         :addEditMode="addEditMode"
+         :currentTaskId="currentTaskId"
+      /> -->
    </div>
 </template>
 
@@ -56,23 +66,16 @@ import TodoItem from './TodoItem.vue';
 import TodoHero from './TodoHero.vue';
 
 export default {
+   name: 'TodoList',
+
    // register our components
    components: {
-   //    TodoItem
-      TodoHero
+      TodoItem, 
+      TodoHero,
    },
 
    // props: ['foodName', 'foodDesc', 'isFavorite']
    props: {
-      totalTasks: {
-         type: Number,
-         required: true
-      },
-
-      completedTasks: {
-         type: Number,
-         required: true
-      }
    },
    
    data() {
@@ -109,7 +112,9 @@ export default {
          alert('handleFilterChange, event value: ' + e.target.value);
       },
 
-      loadDefaultTasks() {
+      loadDefaultTasks(e) {
+         //alert('loadDefaultTasks, event value: ' + e.target.value);
+
          const defaultTasks = [
             {
                id: 1,
@@ -140,10 +145,9 @@ export default {
             this.tasks = savedTasks;
          } else {
             this.tasks = defaultTasks;
-            //alert('loadDefaultTasks from array');
          }
-         this.totalTasks = this.tasks.length;
-         this.completedTasks = this.tasks.filter(task => task.completed).length;
+         // this.totalTasks = this.tasks.length;
+         // this.completedTasks = this.tasks.filter(task => task.completed).length;
       }
    }
 };
