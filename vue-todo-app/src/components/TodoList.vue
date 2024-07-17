@@ -31,6 +31,12 @@
          </ol> -->
 
          <!-- <TodoItem :task="task" /> -->
+         <!--
+         :task="task"
+            This binds the current task object in the iteration to the task prop of <TodoItem>. 
+            Each instance of <TodoItem> will receive a task prop with the corresponding task 
+            object from the tasks array.
+         -->
          <TodoItem v-for="task in tasks" :key="task.id" :task="task" />
 
          <!--
