@@ -55,21 +55,29 @@
             </div>
          </div>
       </div>
-<!--       
-      <TodoAddItemModal
-         :showModal="showModal"
+      
+      <TodoItemModal
+         v-show="showModal"
+         @handleClose="handleClose"
+         :addEditMode="addEditMode"
+      />
+      <!--
+      <TodoItemModalReact
+         showModal={showModal}
          @handleClose="handleClose"
          @addTask="addTask"
          @updateTask="updateTask"
          :addEditMode="addEditMode"
          :currentTaskId="currentTaskId"
-      /> -->
+      />
+      -->
    </div>
 </template>
 
 <script>
 import TodoItem from './TodoItem.vue';
 import TodoHero from './TodoHero.vue';
+import TodoItemModal from './TodoItemModal.vue';
 
 export default {
    name: 'TodoList',
@@ -78,15 +86,22 @@ export default {
    components: {
       TodoItem, 
       TodoHero,
+      TodoItemModal
    },
 
    // props: ['foodName', 'foodDesc', 'isFavorite']
    props: {
+      addEditMode: {
+         type: String,
+         required: false,
+         default: 'Add'
+      }
    },
    
    data() {
       return {
-         tasks: []
+         tasks: [],
+         showModal: false,
       }
    },
 
@@ -109,9 +124,15 @@ export default {
    // Methods are functions that belong to the vue instance under the 'methods' property
    // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
    methods: {
+      // display the add/edit todo modal window
       handleShow() {
-         // setShowModal(true);
-         alert('handleShow');
+         this.showModal = true;
+         //alert('handleShow');
+      },
+
+      handleClose() {
+         this.showModal = false;
+         //alert('handleClose');
       },
 
       handleFilterChange(e) {
