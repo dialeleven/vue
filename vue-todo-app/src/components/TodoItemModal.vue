@@ -8,6 +8,7 @@
          <div className="modal-body">
             <input
                type="text"
+               v-model="todoTextInput"
                value={text}
             />
 
@@ -15,6 +16,7 @@
                <label>Due Date (Optional):</label>
                <input
                   type="datetime-local"
+                  v-model="todoDueDateInput"
                   value={dateTime}
                   className="modal-date-time"
                />
@@ -59,6 +61,9 @@ export default {
    name: 'TodoItemModal',
    // props: ['task', 'deleteTask', 'toggleCompleted', 'updateTask', 'editItemModal']
 
+   data() {
+   },
+
    props: {
       task: {
          type: Array,
@@ -80,6 +85,9 @@ export default {
       // function to toggle the completion status of a todo item
       handleClose() {
          // this.showModal = false;
+         this.todoTextInput = null;
+         this.todoDueDateInput = null;
+         
          this.$emit('handleClose');
 
          //alert('handleClose');
