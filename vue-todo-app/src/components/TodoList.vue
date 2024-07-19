@@ -1,12 +1,12 @@
 <template>
-   <div class="container" @keydown.esc="handleClose">
+   <div class="container" @:keydown.esc="handleClose">
       <div class="header">
-         <button class="top-add-todo-button" @click="handleShow">Add Todo</button>
+         <button class="top-add-todo-button" @:click="handleShow">Add Todo</button>
 
          <TodoHero :completedTasks="completedTasks" :totalTasks="totalTasks" />
 
          <div class="filter-container">
-            <select class="filter-select" @change="handleFilterChange($event)">
+            <select class="filter-select" @:change="handleFilterChange($event)">
                <option value="tasks-all">All</option>
                <option value="tasks-checked">Checked</option>
                <option value="tasks-unchecked">Unchecked</option>
@@ -45,10 +45,10 @@
          
          <div class="footerButtonContainer">
             <div class="footerButtonContainerLeft">
-               <button class="add-todo-button-footer" @click="handleShow">Add Todo</button>
+               <button class="add-todo-button-footer" @:click="handleShow">Add Todo</button>
             </div>
             <div class="footerButtonContainerRight">
-               <button class="load-default-todos-button" value="Load" @click="loadDefaultTasks($event)">
+               <button class="load-default-todos-button" value="Load" @:click="loadDefaultTasks($event)">
                   Load Default Tasks (Reset LocalStorage)
                </button>
             </div>
@@ -57,7 +57,7 @@
       
       <TodoItemModal
          v-show="showModal"
-         @handleClose="handleClose"
+         :handleClose="handleClose"
          :addEditMode="addEditMode"
       />
       <!--
@@ -92,7 +92,7 @@ export default {
       // pass data (default value of 'Add'to our TodoItemModal component via props
       addEditMode: {
          type: String,
-         required: true,
+         required: false,
          default: 'Add'
       }
    },

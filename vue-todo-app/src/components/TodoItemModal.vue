@@ -3,12 +3,12 @@
       <div className="modal">
          <div className="modal-header">
             <h2>{{addEditMode}} Todo</h2>
-            <button className="close-button" @click="handleClose">×</button>
+            <button className="close-button" >×</button>
          </div>
          <div className="modal-body">
             <input
                type="text"
-               v-model="todoTextInput"
+               TEMPv-model="todoTextInput"
                value={text}
             />
 
@@ -16,7 +16,7 @@
                <label>Due Date (Optional):</label>
                <input
                   type="datetime-local"
-                  v-model="todoDueDateInput"
+                  TEMPv-model="todoDueDateInput"
                   value={dateTime}
                   className="modal-date-time"
                />
@@ -45,8 +45,8 @@
              -->
          </div>
          <div className="modal-footer">
-            <button className="modal-button" onClick={handleSubmit}>{{addEditMode}}</button>
-            <button className="modal-button-close" @click="handleClose">Close</button>
+            <button className="modal-button" REACTonClick={handleSubmit}>{{addEditMode}}</button>
+            <!-- <button className="modal-button-close" @:click="handleClose">Close</button> -->
             <!-- {/* expression to conditionally render the 'New' button */} -->
             <!-- {
                isNewButtonHidden ? null : <button className="modal-button" onClick={() => setIsNewButtonHidden(true)}>New</button>
@@ -61,8 +61,8 @@ export default {
    name: 'TodoItemModal',
    // props: ['task', 'deleteTask', 'toggleCompleted', 'updateTask', 'editItemModal']
 
-   data() {
-   },
+   // data() {
+   // },
 
    props: {
       task: {
@@ -87,7 +87,6 @@ export default {
          // this.showModal = false;
          this.todoTextInput = null;
          this.todoDueDateInput = null;
-         
          this.$emit('handleClose');
 
          //alert('handleClose');
@@ -100,7 +99,7 @@ export default {
          // console.log(this.task.text);
          // console.log(this.task.duedate);
          // console.log('task in editItemModal2: ', this.task);
-         this.editItemModal(this.task.id);
+         //this.editItemModal(this.task.id);
       }
    }
 }
