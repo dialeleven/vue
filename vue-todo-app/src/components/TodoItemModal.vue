@@ -3,7 +3,7 @@
       <div className="modal">
          <div className="modal-header">
             <h2>{{addEditMode}} Todo</h2>
-            <button className="close-button" @click="handleClose" onClick={handleClose}>×</button>
+            <button className="close-button" @click="handleClose">×</button>
          </div>
          <div className="modal-body">
             <input
@@ -44,7 +44,7 @@
          </div>
          <div className="modal-footer">
             <button className="modal-button" onClick={handleSubmit}>{{addEditMode}}</button>
-            <button className="modal-button-close" @click="handleClose" onClick={handleClose}>Close</button>
+            <button className="modal-button-close" @click="handleClose">Close</button>
             <!-- {/* expression to conditionally render the 'New' button */} -->
             <!-- {
                isNewButtonHidden ? null : <button className="modal-button" onClick={() => setIsNewButtonHidden(true)}>New</button>
@@ -67,8 +67,7 @@ export default {
 
       addEditMode: {
          type: String,
-         required: false,
-         // default: 'Add'
+         required: true,
       }
    },
 
@@ -78,18 +77,12 @@ export default {
 
 
    methods: {
-
       // function to toggle the completion status of a todo item
       handleClose() {
          // this.showModal = false;
          this.$emit('handleClose');
 
          //alert('handleClose');
-      },
-
-      // confirm todo deletion and call deleteTask() if confirmed
-      handleKeyPress() {
-         alert('handleKeyPress');
       },
 
       // user clicks the edit button to edit the todo item

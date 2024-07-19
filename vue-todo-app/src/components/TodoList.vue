@@ -1,5 +1,5 @@
 <template>
-   <div class="container">
+   <div class="container" @keydown.esc="handleClose">
       <div class="header">
          <button class="top-add-todo-button" @click="handleShow">Add Todo</button>
 
@@ -15,22 +15,6 @@
       </div>
       
       <div class="todo-list">
-         
-         <!-- <TodoItem
-            key={task.id}
-            task={task}
-            deleteTask={deleteTask}
-            toggleCompleted={toggleCompletedAnonFunc}
-            updateTask={updateTask}
-            editItemModal={editItemModal} /> -->
-         
-         <!-- <ol>
-            <li v-for="task in tasks" v-bind:key="task.id">
-               {{ task.text }} <small>{{ task }}</small>
-            </li>
-         </ol> -->
-
-         <!-- <TodoItem :task="task" /> -->
          <!--
          :task="task"
             This binds the current task object in the iteration to the task prop of <TodoItem>. 
@@ -38,12 +22,27 @@
             object from the tasks array.
          -->
          <TodoItem v-for="task in tasks" :key="task.id" :task="task" />
+         
+         <!--
+         * Original React component code
+         <TodoItem
+            key={task.id}
+            task={task}
+            deleteTask={deleteTask}
+            toggleCompleted={toggleCompletedAnonFunc}
+            updateTask={updateTask}
+            editItemModal={editItemModal} />
+         -->
+
 
          <!--
-         <TodoItem v-for="task in tasks" :key="task.id" :task="task" />
+         <ol>
+            <li v-for="task in tasks" v-bind:key="task.id">
+               {{ task.id }} {{ task.text }} {{ task.duedate }} {{ task.completed }} {{ task.position }}
+            </li>
+         </ol>
          -->
          
-         <!-- {{ task.id }} {{ task.text }} {{ task.duedate }} {{ task.completed }} {{ task.position }} -->
          <div class="footerButtonContainer">
             <div class="footerButtonContainerLeft">
                <button class="add-todo-button-footer" @click="handleShow">Add Todo</button>
@@ -89,11 +88,11 @@ export default {
       TodoItemModal
    },
 
-   // props: ['foodName', 'foodDesc', 'isFavorite']
    props: {
+      // pass data (default value of 'Add'to our TodoItemModal component via props
       addEditMode: {
          type: String,
-         required: false,
+         required: true,
          default: 'Add'
       }
    },
@@ -130,9 +129,16 @@ export default {
          //alert('handleShow');
       },
 
+      // hide modal window
       handleClose() {
+         // TODO: clear out text input and date/time input
          this.showModal = false;
          //alert('handleClose');
+      },
+
+      handleKeyPress() {
+         this.showModal = false;
+         //alert('handleKeyPress');
       },
 
       handleFilterChange(e) {
