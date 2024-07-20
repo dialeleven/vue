@@ -1,12 +1,12 @@
 <template>
-   <div class="container" @:keydown.esc="handleClose">
+   <div class="container" @keydown.esc="handleClose">
       <div class="header">
-         <button class="top-add-todo-button" @:click="handleShow">Add Todo</button>
+         <button class="top-add-todo-button" @click="handleShow">Add Todo</button>
 
          <TodoHero :completedTasks="completedTasks" :totalTasks="totalTasks" />
 
          <div class="filter-container">
-            <select class="filter-select" @:change="handleFilterChange($event)">
+            <select class="filter-select" @change="handleFilterChange($event)">
                <option value="tasks-all">All</option>
                <option value="tasks-checked">Checked</option>
                <option value="tasks-unchecked">Unchecked</option>
@@ -45,10 +45,10 @@
          
          <div class="footerButtonContainer">
             <div class="footerButtonContainerLeft">
-               <button class="add-todo-button-footer" @:click="handleShow">Add Todo</button>
+               <button class="add-todo-button-footer" @click="handleShow">Add Todo</button>
             </div>
             <div class="footerButtonContainerRight">
-               <button class="load-default-todos-button" value="Load" @:click="loadDefaultTasks($event)">
+               <button class="load-default-todos-button" value="Load" @click="loadDefaultTasks($event)">
                   Load Default Tasks (Reset LocalStorage)
                </button>
             </div>
@@ -59,6 +59,7 @@
          v-show="showModal"
          :handleClose="handleClose"
          :addEditMode="addEditMode"
+         @toggle-modal="emitFromModalClose"
       />
       <!--
       <TodoItemModalReact
@@ -123,6 +124,12 @@ export default {
    // Methods are functions that belong to the vue instance under the 'methods' property
    // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
    methods: {
+      // receive emit from TodoItemModal
+      emitFromModalClose() {
+         // alert('receiveEmit in TodoList.vue');
+         this.showModal = false;
+      },
+
       // display the add/edit todo modal window
       handleShow() {
          this.showModal = true;
@@ -131,9 +138,10 @@ export default {
 
       // hide modal window
       handleClose() {
+         alert('handleClose from TodoList.vue');
+
          // TODO: clear out text input and date/time input
          this.showModal = false;
-         //alert('handleClose');
       },
 
       handleKeyPress() {
