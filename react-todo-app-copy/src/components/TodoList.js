@@ -1,7 +1,7 @@
 import React, { useState, createContext } from "react";
-import TodoItem from './TodoItem';
+import TodoListItem from './TodoListItem';
 import TodoAddItemModal from './TodoAddItemModal';
-import TodoHero from "./TodoHero";
+import TodoListHero from "./TodoListHero";
 
 import {
    DndContext,
@@ -543,7 +543,7 @@ function TodoList() {
       <div className="container">
          <div className="header">
             <button className="top-add-todo-button" onClick={handleShow}>Add Todo</button>
-            <TodoHero completedTasks={completedTasks} totalTasks={totalTasks} />
+            <TodoListHero completedTasks={completedTasks} totalTasks={totalTasks} />
             <div className="filter-container">
                <select className="filter-select" onChange={handleFilterChange}>
                   <option value="tasks-all">All</option>
@@ -560,7 +560,7 @@ function TodoList() {
             strategy={verticalListSortingStrategy}
             >
             {getFilteredTasks().map(task => (
-                  <TodoItem
+                  <TodoListItem
                      key={task.id}
                      task={task}
                      deleteTask={deleteTask}
@@ -571,7 +571,7 @@ function TodoList() {
             ))}
             {/* original output of tasks array with no filtering
             {tasks.map(task => (
-               <TodoItem
+               <TodoListItem
                   key={task.id}
                   task={task}
                   deleteTask={deleteTask}

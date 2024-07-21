@@ -7,9 +7,9 @@
 
 <script>
 export default {
-   name: 'TodoHero',
+   name: 'TodoListHero',
    // components: {
-   //    TodoItem
+   //    TodoListItem
    // },
 
    props: {

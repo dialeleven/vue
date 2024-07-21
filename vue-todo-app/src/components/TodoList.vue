@@ -3,7 +3,7 @@
       <div class="header">
          <button class="top-add-todo-button" @click="handleShow">Add Todo</button>
 
-         <TodoHero :completedTasks="completedTasks" :totalTasks="totalTasks" />
+         <TodoListHero :completedTasks="completedTasks" :totalTasks="totalTasks" />
 
          <div class="filter-container">
             <select class="filter-select" @change="handleFilterChange($event)">
@@ -17,15 +17,15 @@
       <div class="todo-list">
          <!--
          :task="task"
-            This binds the current task object in the iteration to the task prop of <TodoItem>. 
-            Each instance of <TodoItem> will receive a task prop with the corresponding task 
+            This binds the current task object in the iteration to the task prop of <TodoListItem>. 
+            Each instance of <TodoListItem> will receive a task prop with the corresponding task 
             object from the tasks array.
          -->
-         <TodoItem v-for="task in tasks" :key="task.id" :task="task" />
+         <TodoListItem v-for="task in tasks" :key="task.id" :task="task" />
          
          <!--
          * Original React component code
-         <TodoItem
+         <TodoListItem
             key={task.id}
             task={task}
             deleteTask={deleteTask}
@@ -55,14 +55,14 @@
          </div>
       </div>
       
-      <TodoItemModal
+      <TodoListModal
          v-show="showModal"
          :handleClose="handleClose"
          :addEditMode="addEditMode"
          @toggle-modal="emitFromModalClose"
       />
       <!--
-      <TodoItemModalReact
+      <TodoListModalReact
          showModal={showModal}
          @handleClose="handleClose"
          @addTask="addTask"
@@ -75,22 +75,22 @@
 </template>
 
 <script>
-import TodoItem from './TodoItem.vue';
-import TodoHero from './TodoHero.vue';
-import TodoItemModal from './TodoItemModal.vue';
+import TodoListItem from './TodoListItem.vue';
+import TodoListHero from './TodoListHero.vue';
+import TodoListModal from './TodoListModal.vue';
 
 export default {
    name: 'TodoList',
 
    // register our components
    components: {
-      TodoItem, 
-      TodoHero,
-      TodoItemModal
+      TodoListItem, 
+      TodoListHero,
+      TodoListModal
    },
 
    props: {
-      // pass data (default value of 'Add'to our TodoItemModal component via props
+      // pass data (default value of 'Add'to our TodoListModal component via props
       addEditMode: {
          type: String,
          required: false,
@@ -124,7 +124,7 @@ export default {
    // Methods are functions that belong to the vue instance under the 'methods' property
    // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
    methods: {
-      // receive emit from TodoItemModal
+      // receive emit from TodoListModal
       emitFromModalClose() {
          // alert('receiveEmit in TodoList.vue');
          this.showModal = false;

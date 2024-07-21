@@ -58,7 +58,7 @@
 
 <script>
 export default {
-   name: 'TodoItemModal',
+   name: 'TodoListModal',
    // props: ['task', 'deleteTask', 'toggleCompleted', 'updateTask', 'editItemModal']
 
    data() {
@@ -88,7 +88,7 @@ export default {
    methods: {
       // function to toggle the completion status of a todo item
       handleClose() {
-         // alert('handleClose from TodoItemModal.vue');
+         // alert('handleClose from TodoListModal.vue');
          
          // clear out text input and date/time input
          this.todoTextInput = null;

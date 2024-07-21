@@ -3,7 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 
-function TodoItem({ task, deleteTask, toggleCompleted, updateTask, editItemModal }) {
+function TodoListItem({ task, deleteTask, toggleCompleted, updateTask, editItemModal }) {
    // useSortable hook for dnd kit 
    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
       id: task.id,
@@ -68,9 +68,9 @@ function TodoItem({ task, deleteTask, toggleCompleted, updateTask, editItemModal
    );
 }
 
-// Exporting TodoItem component for use in other files.
+// Exporting TodoListItem component for use in other files.
 // Note: the exported value can be a variable, function, class, or object.
-export default TodoItem;
+export default TodoListItem;
 
 
 /*

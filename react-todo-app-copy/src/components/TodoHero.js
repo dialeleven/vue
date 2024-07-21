@@ -1,8 +1,8 @@
 import React from 'react';
-import './TodoHero.css';
+import './TodoListHero.css';
 
 
-function TodoHero({ completedTasks, totalTasks }) {
+function TodoListHero({ completedTasks, totalTasks }) {
    return (
       <div className="todo-hero">
          <div className="todo-progress-text">Tasks Done:</div>
@@ -11,4 +11,4 @@ function TodoHero({ completedTasks, totalTasks }) {
    );
 }
 
-export default TodoHero;
+export default TodoListHero;
