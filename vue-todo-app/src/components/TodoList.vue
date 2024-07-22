@@ -21,7 +21,13 @@
             Each instance of <TodoListItem> will receive a task prop with the corresponding task 
             object from the tasks array.
          -->
-         <TodoListItem v-for="task in filteredTasks" :key="task.id" :task="task" />
+         <TodoListItem
+            v-for="task in filteredTasks"
+            :key="task.id"
+            :task="task"
+            @delete-task="deleteTask"
+            @edit-task="editTask"
+            @add-task="addTask" />
          <!-- <TodoListItem v-for="task in tasks" :key="task.id" :task="task" /> -->
          
          <!--
@@ -182,6 +188,20 @@ export default {
          //alert('handleFilterChange, event value: ' + e.target.value);
       },
 
+      addTask(e) {
+         //alert('addTask, event value: ' + e.target.value);
+      },
+
+      updateTask(e) {
+         //alert('updateTask, event value: ' + e.target.value);
+      },
+
+      deleteTask(currentTaskId) {
+         // alert('deleteTask in TodoList.vue. Task id: ');
+         this.tasks = this.tasks.filter(task => task.id !== currentTaskId);
+         //alert('deleteTask, event value: ' + e.target.value);
+      },
+
       loadDefaultTasks(e) {
          //alert('loadDefaultTasks, event value: ' + e.target.value);
 
@@ -195,17 +215,38 @@ export default {
             },
             {
                id: 2,
-               text: "Test item asdf",
+               text: "Filter tasks menu logic",
                duedate: "2024-12-31 09:00",
-               completed: false,
+               completed: true,
                position: 2
             },
             {
                id: 3,
-               text: "Another task",
+               text: "Add todo item",
                duedate: "",
                completed: false,
                position: 3
+            },
+            {
+               id: 4,
+               text: "Edit todo item",
+               duedate: "",
+               completed: false,
+               position: 4
+            },
+            {
+               id: 5,
+               text: "Delete todo item",
+               duedate: "",
+               completed: false,
+               position: 5
+            },
+            {
+               id: 6,
+               text: "localStorage save/read of todo items",
+               duedate: "",
+               completed: false,
+               position: 6
             }
          ];
 
