@@ -247,6 +247,13 @@ export default {
                duedate: "",
                completed: false,
                position: 6
+            },
+            {
+               id: 7,
+               text: "Drag and drop reordering of todo items",
+               duedate: "",
+               completed: false,
+               position: 7
             }
          ];
 
