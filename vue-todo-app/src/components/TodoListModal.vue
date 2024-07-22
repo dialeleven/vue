@@ -74,6 +74,11 @@ export default {
          required: false
       },
 
+      tasks: {
+         type: Array,
+         required: true
+      },
+
       addEditMode: {
          type: String,
          required: true,
@@ -101,16 +106,16 @@ export default {
 
       // user clicks the edit button to edit the todo item
       handleSubmit() {
-         // alert('handleSubmit, addEditMode: ' + this.addEditMode + ', text: ' + this.todoTextInput + ', dateTime: ' + this.todoDueDateInput);
+         //alert('handleSubmit, addEditMode: ' + this.addEditMode + ', text: ' + this.todoTextInput + ', dateTime: ' + this.todoDueDateInput);
+         let formattedDateTime = ''; // set to empty string to prevent error
 
          switch (this.addEditMode) {
             case 'Edit':
                //alert('edit mode logic');
-               let formattedDateTime = ''; // set to empty string to prevent error
 
                formattedDateTime = this.dateTime.replace("T", " ");
                
-               updateTask(currentTaskId, text, formattedDateTime);
+               editTask(currentTaskId, text, formattedDateTime);
                handleClose(); // Close the modal after updating
                break;
 
@@ -118,18 +123,28 @@ export default {
                // if text is not empty, add the new task
                if (this.todoTextInput !== null)
                {
-                  // alert(this.todoDueDateInput);
-
-                  // if date/time is not null, replace the 'T' in the date/time with a space and set the date/time
+                  // alert(this.todoTextInput);
+                  
+                  // replace the 'T' in the date/time with a space and set the date/time
                   if (this.todoDueDateInput !== null)
                   {
-                     // replace the 'T' in the date/time with a space and set the date/time
-                     const formattedDateTime = this.todoDueDateInput.replace("T", " ");
-                     
-                     this.todoDueDateInput = "";
+                     formattedDateTime = this.todoDueDateInput.replace("T", " ");
                   }
-                  // addTask({text, dateTime: formattedDateTime});       // Call the addTask function to add the new task
-                  this.todoTextInput = "";         // Reset the text state to an empty string
+
+                  // create the new task object from the user text and date/time inputs
+                  const newTask = {
+                     id: Date.now(),
+                     text: this.todoTextInput,
+                     duedate: formattedDateTime,
+                     completed: false,
+                     // get highest position + 1
+                     position: this.tasks.reduce((maxPos, task) => (task.position > maxPos ? task.position : maxPos), 0) + 1
+                  };
+
+                  // emit the new task to the parent component
+                  this.$emit('add-task', newTask);
+
+                  // close the modal
                   this.handleClose();
                }
                else {

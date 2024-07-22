@@ -66,6 +66,10 @@
          v-show="showModal"
          :handleClose="handleClose"
          :addEditMode="addEditMode"
+         :task="currentTask"
+         :tasks="tasks"
+         @add-task="addTask"
+         @edit-task="editTask"
          @toggle-modal="emitFromModalClose"
       />
       <!--
@@ -109,6 +113,7 @@ export default {
       return {
          tasks: [],
          showModal: false,
+         currentTask: null,
          filterType: 'tasks-all', // default filter type
       }
    },
@@ -188,12 +193,19 @@ export default {
          //alert('handleFilterChange, event value: ' + e.target.value);
       },
 
-      addTask(e) {
+      addTask(newTask) {
          //alert('addTask, event value: ' + e.target.value);
+         this.tasks.push(newTask);
       },
 
       editTask(currentTaskId) {
          alert('editTask in TodoList.vue. Task id: ' + currentTaskId);
+
+         // const index = this.tasks.findIndex(task => task.id === updatedTask.id);
+
+         // if (index !== -1) {
+         //    this.tasks.splice(index, 1, updatedTask);
+         // }
       },
 
       deleteTask(currentTaskId) {
@@ -224,7 +236,7 @@ export default {
                id: 3,
                text: "Add todo item",
                duedate: "",
-               completed: false,
+               completed: true,
                position: 3
             },
             {
