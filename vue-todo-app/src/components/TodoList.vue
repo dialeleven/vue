@@ -21,7 +21,8 @@
             Each instance of <TodoListItem> will receive a task prop with the corresponding task 
             object from the tasks array.
          -->
-         <TodoListItem v-for="task in tasks" :key="task.id" :task="task" />
+         <TodoListItem v-for="task in filteredTasks" :key="task.id" :task="task" />
+         <!-- <TodoListItem v-for="task in tasks" :key="task.id" :task="task" /> -->
          
          <!--
          * Original React component code
@@ -102,17 +103,42 @@ export default {
       return {
          tasks: [],
          showModal: false,
+         filterType: 'tasks-all', // default filter type
       }
    },
 
+   /*
+   Computed properties are:
+      - like data properties, except they depend on other properties.
+
+      - written like methods, but they do not accept any input arguments.
+
+      - updated automatically when a dependency changes, while methods are 
+        called on when something happens like with event handling for example
+
+      - used when outputting something that depends on something else
+   */
    computed: {
+      filteredTasks() {
+         switch (this.filterType) {
+            case 'tasks-checked':
+               return this.tasks.filter(task => task.completed);
+
+            case 'tasks-unchecked':
+               return this.tasks.filter(task => !task.completed);
+
+            default:
+               return this.tasks;
+         }
+      },
+      
       completedTasks() {
          return this.tasks.filter(task => task.completed).length
       },
       
       totalTasks() {
          return this.tasks.length;
-      }
+      },
    },
    
    // mounted lifecycle hook happens after the Vue component is mounted to the DOM
@@ -150,7 +176,10 @@ export default {
       },
 
       handleFilterChange(e) {
-         alert('handleFilterChange, event value: ' + e.target.value);
+         
+         this.filterType = e.target.value;
+         
+         //alert('handleFilterChange, event value: ' + e.target.value);
       },
 
       loadDefaultTasks(e) {
@@ -166,7 +195,7 @@ export default {
             },
             {
                id: 2,
-               text: "Test item",
+               text: "Test item asdf",
                duedate: "2024-12-31 09:00",
                completed: false,
                position: 2

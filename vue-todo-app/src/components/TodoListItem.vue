@@ -2,7 +2,7 @@
    <div class="todo-item">
       <span class="drag-handle">☰</span>
       <div class="todo-content">
-         <input type="checkbox" checked={task.completed} REACTonChange={handleChange} />
+         <input type="checkbox" v-model="task.completed" REACTonChange={handleChange} />
          <div class="todo-text-container">
             <div class="todo-text">
                {{task.text}}
