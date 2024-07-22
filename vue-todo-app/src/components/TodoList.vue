@@ -192,8 +192,8 @@ export default {
          //alert('addTask, event value: ' + e.target.value);
       },
 
-      updateTask(e) {
-         //alert('updateTask, event value: ' + e.target.value);
+      editTask(currentTaskId) {
+         alert('editTask in TodoList.vue. Task id: ' + currentTaskId);
       },
 
       deleteTask(currentTaskId) {
@@ -238,7 +238,7 @@ export default {
                id: 5,
                text: "Delete todo item",
                duedate: "",
-               completed: false,
+               completed: true,
                position: 5
             },
             {
