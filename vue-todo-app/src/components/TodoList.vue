@@ -27,7 +27,8 @@
             :task="task"
             @delete-task="deleteTask"
             @edit-task="editTask"
-            @add-task="addTask" />
+            @add-task="addTask"
+            @edit-item-modal="editItemModal" />
          <!-- <TodoListItem v-for="task in tasks" :key="task.id" :task="task" /> -->
          
          <!--
@@ -100,13 +101,8 @@ export default {
       TodoListModal
    },
 
+   // props are ready only
    props: {
-      // pass data (default value of 'Add'to our TodoListModal component via props
-      addEditMode: {
-         type: String,
-         required: false,
-         default: 'Add'
-      }
    },
    
    data() {
@@ -115,6 +111,7 @@ export default {
          showModal: false,
          currentTask: null,
          filterType: 'tasks-all', // default filter type
+         addEditMode: 'Add',
       }
    },
 
@@ -168,9 +165,12 @@ export default {
       },
 
       // display the add/edit todo modal window
-      handleShow() {
+      handleShow(mode, task) {
+         //alert('handleShow in TodoList.vue');
+         
+         this.addEditMode = mode;
+         this.currentTask = task;
          this.showModal = true;
-         //alert('handleShow');
       },
 
       // hide modal window
@@ -198,14 +198,26 @@ export default {
          this.tasks.push(newTask);
       },
 
-      editTask(currentTaskId) {
-         alert('editTask in TodoList.vue. Task id: ' + currentTaskId);
+      editItemModal(currentTaskId, addEditMode) {
+         //alert('editItemModal in TodoList.vue. Task id: ' + currentTaskId);
+         
+         const task = this.tasks.find(task => task.id === currentTaskId);
 
-         // const index = this.tasks.findIndex(task => task.id === updatedTask.id);
+         if (task) {
+            this.handleShow('Edit', task);
+         } else {
+            console.error(`Task with id ${currentTaskId} not found`);
+         }
+      },
 
-         // if (index !== -1) {
-         //    this.tasks.splice(index, 1, updatedTask);
-         // }
+      editTask(currentTaskId, updatedTask) {
+         // console.log(updatedTask);
+
+         const index = this.tasks.findIndex(task => task.id === currentTaskId);
+
+         if (index !== -1) {
+            this.tasks.splice(index, 1, updatedTask);
+         }
       },
 
       deleteTask(currentTaskId) {
@@ -238,13 +250,6 @@ export default {
                duedate: "",
                completed: true,
                position: 3
-            },
-            {
-               id: 4,
-               text: "Edit todo item",
-               duedate: "",
-               completed: false,
-               position: 4
             },
             {
                id: 5,

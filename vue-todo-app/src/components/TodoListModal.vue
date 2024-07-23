@@ -63,14 +63,23 @@ export default {
 
    data() {
       return {
-         todoTextInput: null,
-         todoDueDateInput: null
+         // todoTextInput: null,
+         // todoDueDateInput: null
+         todoTextInput: this.task ? this.task.text : '',
+         todoDueDateInput: this.task ? this.task.duedate : '',
+      }
+   },
+
+   watch: {
+      task(newTask) {
+         this.todoTextInput = newTask.text;
+         this.todoDueDateInput = newTask.duedate;
       }
    },
 
    props: {
       task: {
-         type: Array,
+         type: Object,
          required: false
       },
 
@@ -111,12 +120,31 @@ export default {
 
          switch (this.addEditMode) {
             case 'Edit':
-               //alert('edit mode logic');
 
-               formattedDateTime = this.dateTime.replace("T", " ");
+               // if text is not empty, add the new task
+               if (this.todoTextInput !== null)
+               {
+                  // alert(this.todoTextInput);
+                  //alert('edit mode logic');
+
+                  // replace the 'T' in the date/time with a space and set the date/time
+                  if (this.todoDueDateInput !== null)
+                  {
+                     formattedDateTime = this.todoDueDateInput.replace("T", " ");
+                  }
+
+                  // emit the updated task to the parent component
+                  const updatedTask = {
+                     ...this.task,
+                     text: this.todoTextInput,
+                     duedate: formattedDateTime
+                  }
+                  
+                  this.$emit('edit-task', this.task.id, updatedTask);
                
-               editTask(currentTaskId, text, formattedDateTime);
-               handleClose(); // Close the modal after updating
+                  // Close the modal after updating
+                  this.handleClose();
+               }
                break;
 
             default:
@@ -124,7 +152,7 @@ export default {
                if (this.todoTextInput !== null)
                {
                   // alert(this.todoTextInput);
-                  
+
                   // replace the 'T' in the date/time with a space and set the date/time
                   if (this.todoDueDateInput !== null)
                   {

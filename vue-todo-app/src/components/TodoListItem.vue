@@ -61,12 +61,17 @@ export default {
 
       // user clicks the edit button to edit the todo item
       handleEdit() {
-         // alert('editItemModal2, current task id: ' + this.task.id);
+         // alert('handleEdit, current task id: ' + this.task.id);
+
+         this.$emit('edit-item-modal', this.task.id, 'Edit');
+
+         // alert('past emit');
+         
          // console.log(this.task.id);
          // console.log(this.task.text);
          // console.log(this.task.duedate);
 
-         this.$emit('edit-task', this.task.id);
+         // this.$emit('edit-task', this.task.id);
       }
    }
 }
