@@ -1,5 +1,5 @@
 <template>
-   <div class="modal-backdrop">
+   <div class="modal-backdrop" @keydown.esc="handleClose">
       <div class="modal">
          <div class="modal-header">
             <h2>{{addEditMode}} Todo</h2>
@@ -9,7 +9,6 @@
             <input
                type="text"
                v-model="todoTextInput"
-               value={text}
             />
 
             <div class="modal-date">
@@ -17,40 +16,14 @@
                <input
                   type="datetime-local"
                   v-model="todoDueDateInput"
-                  value={dateTime}
                   class="modal-date-time"
                />
             </div>
-            <!-- 
-            <input
-               type="text"
-               value={text}
-               onChange={(e) => setText(e.target.value)}
-               placeholder="Enter todo item"
-               onKeyDown={handleKeyPress}
-               required
-               autoFocus
-            />
-
-            <div class="modal-date">
-               <label>Due Date (Optional):</label>
-               <input
-                  type="datetime-local"
-                  value={dateTime}
-                  class="modal-date-time"
-                  onChange="{(e) => setDateTime(e.target.value)}
-                  onKeyDown={handleKeyPress}"
-               />
-            </div>
-             -->
          </div>
          <div class="modal-footer">
             <button class="modal-button" @click="handleSubmit" REACTonClick={handleSubmit}>{{addEditMode}}</button>
             <button class="modal-button-close" @click="handleClose">Close</button>
-            <!-- {/* expression to conditionally render the 'New' button */} -->
-            <!-- {
-               isNewButtonHidden ? null : <button class="modal-button" onClick={() => setIsNewButtonHidden(true)}>New</button>
-            } -->
+
          </div>
       </div>
    </div>
@@ -63,17 +36,24 @@ export default {
 
    data() {
       return {
-         // todoTextInput: null,
-         // todoDueDateInput: null
+         // set initial values for text input and date/time input from edited task or blank (add mode)
          todoTextInput: this.task ? this.task.text : '',
          todoDueDateInput: this.task ? this.task.duedate : '',
       }
    },
 
    watch: {
+      // 
       task(newTask) {
-         this.todoTextInput = newTask.text;
-         this.todoDueDateInput = newTask.duedate;
+         if (newTask) {
+            this.todoTextInput = newTask.text;
+            this.todoDueDateInput = newTask.duedate;
+         }
+         else
+         {
+            this.todoTextInput = '';
+            this.todoDueDateInput = '';
+         }
       }
    },
 
@@ -91,6 +71,7 @@ export default {
       addEditMode: {
          type: String,
          required: true,
+         default: 'Add'
       }
    },
 
@@ -100,20 +81,18 @@ export default {
 
 
    methods: {
-      // function to toggle the completion status of a todo item
+      // close the modal add/edit window and clear inputs
       handleClose() {
          // alert('handleClose from TodoListModal.vue');
          
          // clear out text input and date/time input
-         this.todoTextInput = null;
-         this.todoDueDateInput = null;
+         this.todoTextInput = '';
+         this.todoDueDateInput = '';
          
-         // this.$emit('handleClose');
          this.$emit('toggle-modal');
-
       },
 
-      // user clicks the edit button to edit the todo item
+      // user clicked 'add' button, either add or edit the task depending on addEditMode
       handleSubmit() {
          //alert('handleSubmit, addEditMode: ' + this.addEditMode + ', text: ' + this.todoTextInput + ', dateTime: ' + this.todoDueDateInput);
          let formattedDateTime = ''; // set to empty string to prevent error
@@ -129,20 +108,19 @@ export default {
 
                   // replace the 'T' in the date/time with a space and set the date/time
                   if (this.todoDueDateInput !== null)
-                  {
                      formattedDateTime = this.todoDueDateInput.replace("T", " ");
-                  }
 
-                  // emit the updated task to the parent component
+                  // create an updated task object to pass to parent component
                   const updatedTask = {
                      ...this.task,
                      text: this.todoTextInput,
                      duedate: formattedDateTime
                   }
                   
+                  // emit the current task id and updated task to the parent component
                   this.$emit('edit-task', this.task.id, updatedTask);
                
-                  // Close the modal after updating
+                  // close the modal after updating
                   this.handleClose();
                }
                break;

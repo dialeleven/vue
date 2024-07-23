@@ -1,7 +1,7 @@
 <template>
-   <div class="container" @keydown.esc="handleClose">
+   <div class="container">
       <div class="header">
-         <button class="top-add-todo-button" @click="handleShow">Add Todo</button>
+         <button class="top-add-todo-button" @click="handleShow('Add', null)">Add Todo</button>
 
          <TodoListHero :completedTasks="completedTasks" :totalTasks="totalTasks" />
 
@@ -26,6 +26,7 @@
             :key="task.id"
             :task="task"
             @delete-task="deleteTask"
+            @toggle-completed="toggleCompleted"
             @edit-task="editTask"
             @add-task="addTask"
             @edit-item-modal="editItemModal" />
@@ -41,19 +42,10 @@
             updateTask={updateTask}
             editItemModal={editItemModal} />
          -->
-
-
-         <!--
-         <ol>
-            <li v-for="task in tasks" v-bind:key="task.id">
-               {{ task.id }} {{ task.text }} {{ task.duedate }} {{ task.completed }} {{ task.position }}
-            </li>
-         </ol>
-         -->
          
          <div class="footerButtonContainer">
             <div class="footerButtonContainerLeft">
-               <button class="add-todo-button-footer" @click="handleShow">Add Todo</button>
+               <button class="add-todo-button-footer" @click="handleShow('Add', null)">Add Todo</button>
             </div>
             <div class="footerButtonContainerRight">
                <button class="load-default-todos-button" value="Load" @click="loadDefaultTasks($event)">
@@ -65,22 +57,21 @@
       
       <TodoListModal
          v-show="showModal"
-         :handleClose="handleClose"
          :addEditMode="addEditMode"
          :task="currentTask"
          :tasks="tasks"
          @add-task="addTask"
          @edit-task="editTask"
-         @toggle-modal="emitFromModalClose"
+         @toggle-modal="toggleModalVisibility"
       />
       <!--
-      <TodoListModalReact
-         showModal={showModal}
-         @handleClose="handleClose"
-         @addTask="addTask"
-         @updateTask="updateTask"
-         :addEditMode="addEditMode"
-         :currentTaskId="currentTaskId"
+      <TodoAddItemModal
+            showModal={showModal}
+            addEditMode={addEditMode}
+            addTask={addTask}
+            updateTask={updateTask}
+            currentTaskId={currentTaskId}
+            toggleModalVisibility={toggleModalVisibility}
       />
       -->
    </div>
@@ -127,6 +118,7 @@ export default {
       - used when outputting something that depends on something else
    */
    computed: {
+      // computed property to filter tasks
       filteredTasks() {
          switch (this.filterType) {
             case 'tasks-checked':
@@ -140,10 +132,12 @@ export default {
          }
       },
       
+      // computed property to return the number of completed tasks
       completedTasks() {
          return this.tasks.filter(task => task.completed).length
       },
       
+      // computed property to return the total number of tasks
       totalTasks() {
          return this.tasks.length;
       },
@@ -151,8 +145,16 @@ export default {
    
    // mounted lifecycle hook happens after the Vue component is mounted to the DOM
    mounted() {
-      // initialize tasks array from local storage or default tasks array
-      this.loadDefaultTasks();
+      const storedTasks = localStorage.getItem('tasks');
+
+      // load tasks from localStorage if it exists
+      if (storedTasks) {
+         this.tasks = JSON.parse(storedTasks);
+      }
+      // load default tasks
+      else {
+         this.tasks = this.loadDefaultTasks();
+      }
    },
 
    // Methods are functions that belong to the vue instance under the 'methods' property
@@ -164,40 +166,51 @@ export default {
          this.showModal = false;
       },
 
+      // toggle the completion status of a todo item
+      toggleCompleted(id) {
+         //alert('toggleCompleted in TodoList.vue, id: ' + id);
+
+         this.tasks = this.tasks.map(task => {
+            if (task.id === id) {
+               return { ...task, completed: !task.completed };
+            } else {
+               return task;
+            }
+         });
+
+         const updatedTasksList = JSON.stringify(this.tasks);
+         localStorage.setItem('tasks', updatedTasksList);
+      },
+
       // display the add/edit todo modal window
       handleShow(mode, task) {
-         //alert('handleShow in TodoList.vue');
+         // alert('handleShow in TodoList.vue');
          
          this.addEditMode = mode;
          this.currentTask = task;
          this.showModal = true;
       },
 
-      // hide modal window
-      handleClose() {
-         alert('handleClose from TodoList.vue');
-
-         // TODO: clear out text input and date/time input
-         this.showModal = false;
+      // toggle modal window visibility
+      toggleModalVisibility() {
+         // alert('toggleModalVisibility from TodoList.vue');
+         this.showModal = !this.showModal;
       },
 
-      handleKeyPress() {
-         this.showModal = false;
-         //alert('handleKeyPress');
-      },
-
+      // filter tasks
       handleFilterChange(e) {
-         
          this.filterType = e.target.value;
          
          //alert('handleFilterChange, event value: ' + e.target.value);
       },
 
+      // add a new task to the tasks array
       addTask(newTask) {
          //alert('addTask, event value: ' + e.target.value);
          this.tasks.push(newTask);
       },
 
+      // display the edit task modal for the selected task
       editItemModal(currentTaskId, addEditMode) {
          //alert('editItemModal in TodoList.vue. Task id: ' + currentTaskId);
          
@@ -210,6 +223,7 @@ export default {
          }
       },
 
+      // update a task in the tasks array
       editTask(currentTaskId, updatedTask) {
          // console.log(updatedTask);
 
@@ -220,14 +234,19 @@ export default {
          }
       },
 
+      // delete a task from the tasks array
       deleteTask(currentTaskId) {
          // alert('deleteTask in TodoList.vue. Task id: ');
          this.tasks = this.tasks.filter(task => task.id !== currentTaskId);
-         //alert('deleteTask, event value: ' + e.target.value);
+
+         // update localStorage after deleting item (convert tasks array to JSON string)
+         const updatedTasksList = JSON.stringify(this.tasks.filter(task => task.id !== currentTaskId));
+         localStorage.setItem('tasks', updatedTasksList);
       },
 
+      // load default tasks
       loadDefaultTasks(e) {
-         //alert('loadDefaultTasks, event value: ' + e.target.value);
+         // alert('loadDefaultTasks, event value: ' + e.target.value);
 
          const defaultTasks = [
             {
@@ -239,50 +258,39 @@ export default {
             },
             {
                id: 2,
-               text: "Filter tasks menu logic",
-               duedate: "2024-12-31 09:00",
+               text: "Add todo item",
+               duedate: "",
                completed: true,
                position: 2
             },
             {
                id: 3,
-               text: "Add todo item",
+               text: "Delete todo item",
                duedate: "",
                completed: true,
                position: 3
             },
             {
-               id: 5,
-               text: "Delete todo item",
-               duedate: "",
-               completed: true,
-               position: 5
-            },
-            {
-               id: 6,
+               id: 4,
                text: "localStorage save/read of todo items",
                duedate: "",
-               completed: false,
-               position: 6
+               completed: true,
+               position: 4
             },
             {
-               id: 7,
+               id: 5,
                text: "Drag and drop reordering of todo items",
-               duedate: "",
+               duedate: "2024-08-01 12:00",
                completed: false,
-               position: 7
+               position: 5
             }
          ];
 
-         const savedTasks = JSON.parse(localStorage.getItem('tasks'));
-
-         if (savedTasks && savedTasks.length) {
-            this.tasks = savedTasks;
-         } else {
-            this.tasks = defaultTasks;
-         }
-         // this.totalTasks = this.tasks.length;
-         // this.completedTasks = this.tasks.filter(task => task.completed).length;
+         // store updated tasks in local storage converting the tasks array of objects to a JSON string
+         const updatedTasksList = JSON.stringify(defaultTasks);
+         localStorage.setItem('tasks', updatedTasksList);
+         
+         this.tasks = defaultTasks;
       }
    }
 };

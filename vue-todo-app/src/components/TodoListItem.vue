@@ -2,7 +2,7 @@
    <div class="todo-item">
       <span class="drag-handle">☰</span>
       <div class="todo-content">
-         <input type="checkbox" v-model="task.completed" />
+         <input type="checkbox" v-model="task.completed" @click="toggleCompleted" />
          <div class="todo-text-container">
             <div class="todo-text">
                {{task.text}}
@@ -46,6 +46,12 @@ export default {
    methods: {
 
       // function to toggle the completion status of a todo item
+      toggleCompleted() {
+         // alert('toggleCompleted');
+         this.$emit('toggle-completed', this.task.id);
+      },
+
+      // function to toggle the completion status of a todo item
       handleChange() {
          this.toggleCompleted(this.task.id);
       },
@@ -59,10 +65,11 @@ export default {
          }
       },
 
-      // user clicks the edit button to edit the todo item
+      // edit a todo item
       handleEdit() {
          // alert('handleEdit, current task id: ' + this.task.id);
 
+         // emit event to parent component with current task id and 'Edit' mode
          this.$emit('edit-item-modal', this.task.id, 'Edit');
 
          // alert('past emit');
@@ -78,46 +85,3 @@ export default {
 </script>
 
 <style></style>
-
-<!-- import React from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-
-
-function TodoListItem({ task, deleteTask, toggleCompleted, updateTask, editItemModal }) {
-   // useSortable hook for dnd kit 
-   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-      id: task.id,
-   });
-
-   // style for dnd kit
-   const style = {
-      transform: CSS.Transform.toString(transform),
-      transition,
-   };
-
-   // function to toggle the completion status of a todo item
-   function handleChange() {
-      toggleCompleted(task.id);
-   }
-
-   // confirm todo deletion and call deleteTask() if confirmed
-   function handleDelete() {
-      if (window.confirm(`Delete todo: ${task.text}?`))
-         deleteTask(task.id);
-   }
-
-   // user clicks the edit button to edit the todo item
-   function editItemModal2() {
-      //alert('hi');
-      // console.log(task.id);
-      // console.log(task.text);
-      // console.log(task.duedate);
-      // console.log('task in editItemModal2: ', task);
-       console.log('task.id in editItemModal2: ', task.id);
-
-      // call editItemModal() from TodoList.js, passing in the task object being edited
-      editItemModal(task.id);
-   }
-
-   return ( -->
