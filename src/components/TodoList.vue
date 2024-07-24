@@ -160,12 +160,6 @@ export default {
    // Methods are functions that belong to the vue instance under the 'methods' property
    // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
    methods: {
-      // receive emit from TodoListModal
-      emitFromModalClose() {
-         // alert('receiveEmit in TodoList.vue');
-         this.showModal = false;
-      },
-
       // toggle the completion status of a todo item
       toggleCompleted(id) {
          //alert('toggleCompleted in TodoList.vue, id: ' + id);
@@ -186,9 +180,9 @@ export default {
       handleShow(mode, task) {
          // console.log('handleShow in TodoList.vue, mode: ' + mode + ', task: ', task);
          
-         this.addEditMode = mode;
-         this.currentTask = task;
-         this.showModal = true;
+         this.addEditMode = mode; // adjust 'Add' or 'Edit' label in modal
+         this.currentTask = task; // pass task object to modal
+         this.showModal = true;   //
       },
 
       // toggle modal window visibility
@@ -196,6 +190,7 @@ export default {
          // alert('toggleModalVisibility from TodoList.vue');
          this.showModal = !this.showModal;
 
+         // clear currentTask if modal is closed
          if (!this.showModal) {
             // alert('clearing currentTask in TodoList.vue');
             
@@ -205,7 +200,7 @@ export default {
          }
       },
 
-      // filter tasks
+      // filter tasks based on the filter type
       handleFilterChange(e) {
          this.filterType = e.target.value;
          
@@ -238,12 +233,15 @@ export default {
       editTask(currentTaskId, updatedTask) {
          // console.log(updatedTask);
 
+         // find the index of the task to be updated
          const index = this.tasks.findIndex(task => task.id === currentTaskId);
 
+         // if the task is found, update it with the updatedTask object
          if (index !== -1) {
             this.tasks.splice(index, 1, updatedTask);
          }
 
+         // update localStorage after editing item
          const updatedTasksList = JSON.stringify(this.tasks);
          localStorage.setItem('tasks', updatedTasksList);
       },
@@ -304,6 +302,7 @@ export default {
          const updatedTasksList = JSON.stringify(defaultTasks);
          localStorage.setItem('tasks', updatedTasksList);
          
+         // update tasks array with default tasks array
          this.tasks = defaultTasks;
       }
    }

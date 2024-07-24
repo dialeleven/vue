@@ -72,13 +72,9 @@ export default {
          // emit event to parent component with current task id and 'Edit' mode
          this.$emit('edit-item-modal', this.task.id, 'Edit');
 
-         // alert('past emit');
-         
          // console.log(this.task.id);
          // console.log(this.task.text);
          // console.log(this.task.duedate);
-
-         // this.$emit('edit-task', this.task.id);
       }
    }
 }

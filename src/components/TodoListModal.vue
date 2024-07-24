@@ -43,15 +43,20 @@ export default {
    },
 
    watch: {
-      // 
-      task(newTask) {
-         if (newTask) {
-            this.todoTextInput = newTask.text;
-            this.todoDueDateInput = newTask.duedate;
+      // if task prop changes, update text input and date/time input
+      task(currentTask) {
+         // task selected for edit, so populate the text input and date/time input
+         if (currentTask) {
+            // console.log('currentTask in watch ', currentTask);
+            // console.log('addEditMode: ', this.addEditMode);
+
+            this.todoTextInput = currentTask.text;
+            this.todoDueDateInput = currentTask.duedate;
          }
+         // add action mode, so clear the text input and date/time input
          else
          {
-            /* is this needed? */
+            /* TODO: is this needed? Seems like the data() return handles this ok. */
             this.todoTextInput = '';
             this.todoDueDateInput = '';
          }
@@ -59,16 +64,19 @@ export default {
    },
 
    props: {
+      // the current task object being edited (if any)
       task: {
          type: Object,
          required: false
       },
 
+      // the tasks array
       tasks: {
          type: Array,
          required: true
       },
 
+      // 'Add' or 'Edit' mode label
       addEditMode: {
          type: String,
          required: true,
@@ -98,6 +106,7 @@ export default {
          //alert('handleSubmit, addEditMode: ' + this.addEditMode + ', text: ' + this.todoTextInput + ', dateTime: ' + this.todoDueDateInput);
          let formattedDateTime = ''; // set to empty string to prevent error
 
+         // handle add/edit action based on addEditMode
          switch (this.addEditMode) {
             case 'Edit':
 
@@ -126,6 +135,7 @@ export default {
                }
                break;
 
+            // add new task
             default:
                // alert('add mode logic. todoTextInput: ' + this.todoTextInput + ', todoDueDateInput: ' + this.todoDueDateInput);
 
