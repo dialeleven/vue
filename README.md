@@ -1,4 +1,7 @@
-VueTodo App - Todo List
+# VueTODO List App
+Getting familiarized with Vue.js by converting a TODO App created in React.js originally.
+
+## VueTodo App - Todo List
 - [ ] Drag and drop reordering of todo
 - [ ] Autofocus text input
 - [x] Handle Enter key
