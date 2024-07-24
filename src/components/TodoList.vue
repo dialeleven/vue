@@ -15,12 +15,32 @@
       </div>
       
       <div class="todo-list">
-         <!--
-         :task="task"
-            This binds the current task object in the iteration to the task prop of <TodoListItem>. 
-            Each instance of <TodoListItem> will receive a task prop with the corresponding task 
-            object from the tasks array.
-         -->
+         <draggable v-model="tasks" item-key="id" @end="onEnd">
+            <!--
+            TodoListItem comments:
+            
+            Function: v-if checks if the element (current task) exists in the filteredTasks array. 
+            The .some method returns true if at least one task in filteredTasks has an id matching element.id. 
+            If true, the TodoListItem is rendered; otherwise, it is not.
+
+            `task.id === element.id`: A comparison that checks if the id of the task 
+            in filteredTasks matches the id of the current element.
+            -->
+            <template #item="{ element }">
+               <TodoListItem
+                  v-if="filteredTasks.some(task => task.id === element.id)"
+                  :key="element.id"
+                  :task="element"
+                  @delete-task="deleteTask"
+                  @toggle-completed="toggleCompleted"
+                  @edit-task="editTask"
+                  @add-task="addTask"
+                  @edit-item-modal="editItemModal" />
+            </template>
+         </draggable>
+         
+         <!-- Original TodoListItem component without draggable -->
+         <!-- 
          <TodoListItem
             v-for="task in filteredTasks"
             :key="task.id"
@@ -30,8 +50,16 @@
             @edit-task="editTask"
             @add-task="addTask"
             @edit-item-modal="editItemModal" />
+         -->
+
          <!-- <TodoListItem v-for="task in tasks" :key="task.id" :task="task" /> -->
-         
+          
+         <!--
+         :task="task"
+            This binds the current task object in the iteration to the task prop of <TodoListItem>. 
+            Each instance of <TodoListItem> will receive a task prop with the corresponding task 
+            object from the tasks array to handle clicking the edit button.
+         -->
          <!--
          * Original React component code
          <TodoListItem
@@ -78,6 +106,8 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable';
+
 import TodoListItem from './TodoListItem.vue';
 import TodoListHero from './TodoListHero.vue';
 import TodoListModal from './TodoListModal.vue';
@@ -87,6 +117,7 @@ export default {
 
    // register our components
    components: {
+      draggable, // for vuedraggable
       TodoListItem, 
       TodoListHero,
       TodoListModal
@@ -98,6 +129,7 @@ export default {
    
    data() {
       return {
+         drag: false, // for vuedraggable
          tasks: [],
          showModal: false,
          currentTask: null,
@@ -120,6 +152,8 @@ export default {
    computed: {
       // computed property to filter tasks
       filteredTasks() {
+         console.log('filteredTasks, filterType: ' + this.filterType);
+
          switch (this.filterType) {
             case 'tasks-checked':
                return this.tasks.filter(task => task.completed);
@@ -160,6 +194,16 @@ export default {
    // Methods are functions that belong to the vue instance under the 'methods' property
    // Tip: We need to write `this.` as prefix to refer to a data property from inside a method.
    methods: {
+      // drag and drop end event handler
+      onEnd(event) {
+         // convert tasks array to JSON string
+         const updatedTasksList = JSON.stringify(this.tasks);
+
+         // save reordered tasks to localStorage
+         localStorage.setItem('tasks', updatedTasksList);
+         console.log('Drag ended:', event);
+      },
+
       // toggle the completion status of a todo item
       toggleCompleted(id) {
          //alert('toggleCompleted in TodoList.vue, id: ' + id);
@@ -202,9 +246,9 @@ export default {
 
       // filter tasks based on the filter type
       handleFilterChange(e) {
+         console.log('handleFilterChange, event value: ' + e.target.value);
+
          this.filterType = e.target.value;
-         
-         //alert('handleFilterChange, event value: ' + e.target.value);
       },
 
       // add a new task to the tasks array
