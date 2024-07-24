@@ -5,6 +5,7 @@ Getting familiarized with Vue.js by converting a [TODO App created in React.js](
 - [ ] Drag and drop reordering of todo
 - [ ] Autofocus text input
 - [x] Handle Enter key
+- [ ] Deploy project online (e.g Netlify)
 
 
 # firstsfc
