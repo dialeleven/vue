@@ -1,5 +1,5 @@
 # VueTODO List App
-Getting familiarized with Vue.js by converting a TODO App created in React.js originally.
+Getting familiarized with Vue.js by converting a [TODO App created in React.js](https://github.com/dialeleven/react-todo-app-medium) originally.
 
 ## VueTodo App - Todo List
 - [ ] Drag and drop reordering of todo
