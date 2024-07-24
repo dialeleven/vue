@@ -1,5 +1,5 @@
 <template>
-   <div class="modal-backdrop" @keydown.esc="handleClose">
+   <div class="modal-backdrop" @keydown.esc="handleClose" @keydown.enter="handleSubmit">
       <div class="modal">
          <div class="modal-header">
             <h2>{{addEditMode}} Todo</h2>
@@ -51,6 +51,7 @@ export default {
          }
          else
          {
+            /* is this needed? */
             this.todoTextInput = '';
             this.todoDueDateInput = '';
          }
@@ -101,13 +102,13 @@ export default {
             case 'Edit':
 
                // if text is not empty, add the new task
-               if (this.todoTextInput !== null)
+               if (this.todoTextInput !== '')
                {
                   // alert(this.todoTextInput);
                   //alert('edit mode logic');
 
                   // replace the 'T' in the date/time with a space and set the date/time
-                  if (this.todoDueDateInput !== null)
+                  if (this.todoDueDateInput !== '')
                      formattedDateTime = this.todoDueDateInput.replace("T", " ");
 
                   // create an updated task object to pass to parent component
@@ -126,13 +127,15 @@ export default {
                break;
 
             default:
+               // alert('add mode logic. todoTextInput: ' + this.todoTextInput + ', todoDueDateInput: ' + this.todoDueDateInput);
+
                // if text is not empty, add the new task
-               if (this.todoTextInput !== null)
+               if (this.todoTextInput !== '')
                {
                   // alert(this.todoTextInput);
 
                   // replace the 'T' in the date/time with a space and set the date/time
-                  if (this.todoDueDateInput !== null)
+                  if (this.todoDueDateInput !== '')
                   {
                      formattedDateTime = this.todoDueDateInput.replace("T", " ");
                   }

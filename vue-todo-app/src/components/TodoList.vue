@@ -184,7 +184,7 @@ export default {
 
       // display the add/edit todo modal window
       handleShow(mode, task) {
-         // alert('handleShow in TodoList.vue');
+         // console.log('handleShow in TodoList.vue, mode: ' + mode + ', task: ', task);
          
          this.addEditMode = mode;
          this.currentTask = task;
@@ -195,6 +195,14 @@ export default {
       toggleModalVisibility() {
          // alert('toggleModalVisibility from TodoList.vue');
          this.showModal = !this.showModal;
+
+         if (!this.showModal) {
+            // alert('clearing currentTask in TodoList.vue');
+            
+            // Reset currentTask to null if modal is closed to prevent blank form input values
+            // on multiple edits on the same task
+            this.currentTask = null;
+         }
       },
 
       // filter tasks
@@ -208,6 +216,9 @@ export default {
       addTask(newTask) {
          //alert('addTask, event value: ' + e.target.value);
          this.tasks.push(newTask);
+
+         const updatedTasksList = JSON.stringify(this.tasks);
+         localStorage.setItem('tasks', updatedTasksList);
       },
 
       // display the edit task modal for the selected task
@@ -232,6 +243,9 @@ export default {
          if (index !== -1) {
             this.tasks.splice(index, 1, updatedTask);
          }
+
+         const updatedTasksList = JSON.stringify(this.tasks);
+         localStorage.setItem('tasks', updatedTasksList);
       },
 
       // delete a task from the tasks array
