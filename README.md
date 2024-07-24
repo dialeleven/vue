@@ -1,3 +1,9 @@
+VueTodo App - Todo List
+- [ ] Drag and drop reordering of todo
+- [ ] Autofocus text input
+- [x] Handle Enter key
+
+
 # firstsfc
 
 This template should help get you started developing with Vue 3 in Vite.
