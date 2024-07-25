@@ -3,7 +3,7 @@ Getting familiarized with Vue.js by converting a [TODO App created in React.js](
 
 ## VueTodo App - Todo List
 - [x] Drag and drop reordering of todo with [vue.draggable.next](https://github.com/SortableJS/vue.draggable.next)
-- [ ] Autofocus text input
+- [x] Autofocus text input
 - [x] Handle Enter key
 - [ ] Deploy project online (e.g Netlify)
 
