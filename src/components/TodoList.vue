@@ -343,9 +343,9 @@ export default {
             }
          ];
 
-         // // store updated tasks in local storage converting the tasks array of objects to a JSON string
-         // const updatedTasksList = JSON.stringify(defaultTasks);
-         // localStorage.setItem('tasks', updatedTasksList);
+         // store updated tasks in local storage converting the tasks array of objects to a JSON string
+         const updatedTasksList = JSON.stringify(defaultTasks);
+         localStorage.setItem('tasks', updatedTasksList);
          
          // // update tasks array with default tasks array
          this.tasks = defaultTasks;
