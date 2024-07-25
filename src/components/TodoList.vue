@@ -76,7 +76,7 @@
                <button class="add-todo-button-footer" @click="handleShow('Add', null)">Add Todo</button>
             </div>
             <div class="footerButtonContainerRight">
-               <button class="load-default-todos-button" value="Load" @click="loadDefaultTasks($event)">
+               <button class="load-default-todos-button" value="Load Default Tasks" @click="loadDefaultTasks($event)">
                   Load Default Tasks (Reset LocalStorage)
                </button>
             </div>
@@ -302,8 +302,16 @@ export default {
       },
 
       // load default tasks
-      loadDefaultTasks(e) {
-         // alert('loadDefaultTasks, event value: ' + e.target.value);
+      loadDefaultTasks(event = null) {
+         /*
+         !!! WARNING !!! Outputting the console.log output breaks the default loading of tasks on
+         initial page load in a new browser session where there is no saved localStorage data.
+         */
+         // console.log('loadDefaultTasks, event value: ' + e.target.value);
+         
+         // Confirm if the user wants to load default tasks. 
+         // If the event is not defined, the app is being loaded for the first time.
+         if (event && !confirm('Load default tasks?')) { return false; }
 
          const defaultTasks = [
             {
@@ -347,7 +355,9 @@ export default {
          const updatedTasksList = JSON.stringify(defaultTasks);
          localStorage.setItem('tasks', updatedTasksList);
          
-         // // update tasks array with default tasks array
+         // Update tasks array with default tasks array, needed for updating the tasks array
+         // after modifying the tasks lists and wanting to load default tasks. If we do not,
+         // then the tasks list will not display the default tasks.
          this.tasks = defaultTasks;
 
          return defaultTasks;
