@@ -16,7 +16,7 @@ Getting familiarized with Vue.js by converting a [TODO App created in React.js](
 - [x] Autofocus text input
 - [x] Handle Enter key
 - [x] Deploy project online (e.g Netlify)
-
+- [ ] <script setup> version for all components vs <script>
 
 # firstsfc
 
