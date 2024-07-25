@@ -1,7 +1,7 @@
 # VueTODO List App
 Getting familiarized with Vue.js by converting a [TODO App created in React.js](https://github.com/dialeleven/react-todo-app-medium) originally. Project demo has been deployed to Netlify at **[https://vue-todo-app8.netlify.app](https://vue-todo-app8.netlify.app)**.
 
-This project covers a variety of Vue.js skills including:
+## Vue.js Concepts Used In Project
 - Component based architecture (e.g. TodoList, TodoListItem, TodoListHero, TodoListModal)
 - Data properties (e.g. `totalTasks` passed down to TodoListHero component)
 - Computed properties: to derive new values based on existing data properties (e.g. `completedTasks` and `totalTasks` computed from the tasks array)
