@@ -153,7 +153,7 @@ export default {
    computed: {
       // computed property to filter tasks
       filteredTasks() {
-         console.log('filteredTasks, filterType: ' + this.filterType);
+         // console.log('filteredTasks, filterType: ' + this.filterType);
 
          switch (this.filterType) {
             case 'tasks-checked':
@@ -343,12 +343,14 @@ export default {
             }
          ];
 
-         // store updated tasks in local storage converting the tasks array of objects to a JSON string
-         const updatedTasksList = JSON.stringify(defaultTasks);
-         localStorage.setItem('tasks', updatedTasksList);
+         return defaultTasks;
+
+         // // store updated tasks in local storage converting the tasks array of objects to a JSON string
+         // const updatedTasksList = JSON.stringify(defaultTasks);
+         // localStorage.setItem('tasks', updatedTasksList);
          
-         // update tasks array with default tasks array
-         this.tasks = defaultTasks;
+         // // update tasks array with default tasks array
+         // this.tasks = defaultTasks;
       }
    }
 };
