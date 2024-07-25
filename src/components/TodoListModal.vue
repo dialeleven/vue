@@ -1,6 +1,6 @@
 <template>
    <div class="modal-backdrop" @keydown.esc="handleClose" @keydown.enter="handleSubmit">
-      <div class="modal">
+      <div class="modal" v-if="showModal">
          <div class="modal-header">
             <h2>{{addEditMode}} Todo</h2>
             <button class="close-button" @click="handleClose">×</button>
@@ -9,6 +9,7 @@
             <input
                type="text"
                v-model="todoTextInput"
+               ref="todoInput"
             />
 
             <div class="modal-date">
@@ -30,9 +31,41 @@
 </template>
 
 <script>
+import { ref, watch, nextTick } from 'vue';
+
 export default {
    name: 'TodoListModal',
    // props: ['task', 'deleteTask', 'toggleCompleted', 'updateTask', 'editItemModal']
+
+   // define reactive state using `ref` function to 
+   setup(props) {
+      const todoInput = ref(null);
+
+      watch(() => props.showModal, (newVal) => {
+         if (newVal) {
+            /*
+            Defer execution of callback until after the next DOM update cycle with nextTick(). 
+            https://vuejs.org/guide/essentials/render-function.html#next-tick
+
+            This ensures that the DOM has been updated before the callback is executed. 
+            In this case, it makes sure the modal and its input elements are fully rendered 
+            before attempting to access todoInput.
+            */
+            nextTick(() => {
+               if (todoInput.value) {
+                  todoInput.value.focus();
+               } else {
+                  console.error("todoInput is null");
+               }
+            });
+         }
+      });
+
+      // return our todoInput to be used in the template so it can be focused
+      return {
+         todoInput,
+      };
+   },
 
    data() {
       return {
@@ -63,6 +96,7 @@ export default {
       }
    },
 
+   // pass data to the components
    props: {
       // the current task object being edited (if any)
       task: {
@@ -81,7 +115,13 @@ export default {
          type: String,
          required: true,
          default: 'Add'
-      }
+      },
+
+      showModal: {
+         type: Boolean,
+         required: true
+      },
+
    },
 
    mounted() {
@@ -89,6 +129,7 @@ export default {
    },
 
 
+   // event handler methods
    methods: {
       // close the modal add/edit window and clear inputs
       handleClose() {

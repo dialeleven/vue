@@ -88,6 +88,7 @@
          :addEditMode="addEditMode"
          :task="currentTask"
          :tasks="tasks"
+         :showModal="showModal"
          @add-task="addTask"
          @edit-task="editTask"
          @toggle-modal="toggleModalVisibility"
