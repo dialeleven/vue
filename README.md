@@ -1,5 +1,5 @@
 # About VueTODO List App
-Getting familiarized with Vue.js by converting a [TODO App created in React.js](https://github.com/dialeleven/react-todo-app-medium) originally.
+Getting familiarized with Vue.js by converting a [TODO App originally created in React.js](https://github.com/dialeleven/react-todo-app-medium).
 
 ## Live Demo
 Project demo has been deployed to Netlify at **[https://vue-todo-app8.netlify.app](https://vue-todo-app8.netlify.app)**.
