@@ -15,7 +15,7 @@
       </div>
       
       <div class="todo-list">
-         <draggable v-model="tasks" item-key="id" @end="onEnd">
+         <draggable v-model="tasks" item-key="id" @end="onEnd" handle=".drag-handle">
             <!--
             TodoListItem comments:
             
