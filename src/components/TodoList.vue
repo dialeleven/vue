@@ -343,14 +343,14 @@ export default {
             }
          ];
 
-         return defaultTasks;
-
          // // store updated tasks in local storage converting the tasks array of objects to a JSON string
          // const updatedTasksList = JSON.stringify(defaultTasks);
          // localStorage.setItem('tasks', updatedTasksList);
          
          // // update tasks array with default tasks array
-         // this.tasks = defaultTasks;
+         this.tasks = defaultTasks;
+
+         return defaultTasks;
       }
    }
 };
