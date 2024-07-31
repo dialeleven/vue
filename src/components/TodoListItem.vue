@@ -26,6 +26,45 @@
    </div>
 </template>
 
+<script setup>
+import { defineProps, defineEmits } from 'vue';
+
+// Define props
+const props = defineProps({
+   task: {
+      type: Object,
+      required: true
+   }
+});
+
+// Define emits
+const emit = defineEmits(['toggle-completed', 'delete-task', 'edit-item-modal']);
+
+// Function to toggle the completion status of a todo item
+const toggleCompleted = () => {
+   emit('toggle-completed', props.task.id);
+};
+
+// Function to handle checkbox change
+const handleChange = () => {
+   toggleCompleted();
+};
+
+// Confirm todo deletion and call deleteTask if confirmed
+const handleDelete = () => {
+   if (window.confirm(`Delete todo: ${props.task.text}?`)) {
+      emit('delete-task', props.task.id);
+   }
+};
+
+// Edit a todo item
+const handleEdit = () => {
+   emit('edit-item-modal', props.task.id, 'Edit');
+};
+</script>
+
+<!-- <script> version -->
+<!-- 
 <script>
 export default {
    name: 'TodoListItem',
@@ -79,5 +118,7 @@ export default {
    }
 }
 </script>
+-->
+
 
 <style></style>

@@ -30,6 +30,112 @@
    </div>
 </template>
 
+<script setup>
+import { ref, watch, nextTick, defineProps, defineEmits } from 'vue';
+
+// Define props
+const props = defineProps({
+  task: {
+    type: Object,
+    required: false
+  },
+  tasks: {
+    type: Array,
+    required: true
+  },
+  addEditMode: {
+    type: String,
+    required: true,
+    default: 'Add'
+  },
+  showModal: {
+    type: Boolean,
+    required: true
+  }
+});
+
+// Define emits
+const emit = defineEmits(['toggle-modal', 'edit-task', 'add-task']);
+
+// Reactive state data using ref() to track changes to the value it contains
+const todoInput = ref(null);
+const todoTextInput = ref(props.task ? props.task.text : '');
+const todoDueDateInput = ref(props.task ? props.task.duedate : '');
+
+// Watch for showModal changes
+watch(() => props.showModal, (newVal) => {
+  if (newVal) {
+    nextTick(() => {
+      if (todoInput.value) {
+        todoInput.value.focus();
+      } else {
+        console.error("todoInput is null");
+      }
+    });
+  }
+});
+
+// Watch for task prop changes
+watch(() => props.task, (currentTask) => {
+  if (currentTask) {
+    todoTextInput.value = currentTask.text;
+    todoDueDateInput.value = currentTask.duedate;
+  } else {
+    todoTextInput.value = '';
+    todoDueDateInput.value = '';
+  }
+});
+
+
+// Methods ----------------------------------------------
+const handleClose = () => {
+  todoTextInput.value = '';
+  todoDueDateInput.value = '';
+  emit('toggle-modal');
+};
+
+const handleSubmit = () => {
+  let formattedDateTime = '';
+
+  switch (props.addEditMode) {
+    case 'Edit':
+      if (todoTextInput.value !== '') {
+        if (todoDueDateInput.value !== '') {
+          formattedDateTime = todoDueDateInput.value.replace("T", " ");
+        }
+        const updatedTask = {
+          ...props.task,
+          text: todoTextInput.value,
+          duedate: formattedDateTime
+        };
+        emit('edit-task', props.task.id, updatedTask);
+        handleClose();
+      }
+      break;
+
+    default:
+      if (todoTextInput.value !== '') {
+        if (todoDueDateInput.value !== '') {
+          formattedDateTime = todoDueDateInput.value.replace("T", " ");
+        }
+        const newTask = {
+          id: Date.now(),
+          text: todoTextInput.value,
+          duedate: formattedDateTime,
+          completed: false,
+          position: props.tasks.reduce((maxPos, task) => (task.position > maxPos ? task.position : maxPos), 0) + 1
+        };
+        emit('add-task', newTask);
+        handleClose();
+      } else {
+        alert('Please enter some text.');
+      }
+  }
+};
+</script>
+
+<!-- regular <script> version -->
+<!-- 
 <script>
 import { ref, watch, nextTick } from 'vue';
 
@@ -221,7 +327,7 @@ export default {
    }
 }
 </script>
-
+ -->
 
 <style>
 .modal-backdrop {

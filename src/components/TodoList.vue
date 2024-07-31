@@ -106,6 +106,141 @@
    </div>
 </template>
 
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import draggable from 'vuedraggable';
+
+import TodoListItem from './TodoListItem.vue';
+import TodoListHero from './TodoListHero.vue';
+import TodoListModal from './TodoListModal.vue';
+
+// Data properties
+const tasks = ref([]);
+const showModal = ref(false);
+const currentTask = ref(null);
+const filterType = ref('tasks-all');
+const addEditMode = ref('Add');
+const drag = ref(false);
+
+// Computed properties
+const filteredTasks = computed(() => {
+   switch (filterType.value) {
+     case 'tasks-checked':
+        return tasks.value.filter(task => task.completed);
+     case 'tasks-unchecked':
+        return tasks.value.filter(task => !task.completed);
+     default:
+        return tasks.value;
+   }
+});
+
+const completedTasks = computed(() => {
+   return tasks.value.filter(task => task.completed).length;
+});
+
+const totalTasks = computed(() => {
+   return tasks.value.length;
+});
+
+// Methods
+const onEnd = (event) => {
+   const updatedTasksList = JSON.stringify(tasks.value);
+   localStorage.setItem('tasks', updatedTasksList);
+   console.log('Drag ended:', event);
+};
+
+const toggleCompleted = (id) => {
+   tasks.value = tasks.value.map(task => {
+     if (task.id === id) {
+        return { ...task, completed: !task.completed };
+     } else {
+        return task;
+     }
+   });
+
+   const updatedTasksList = JSON.stringify(tasks.value);
+   localStorage.setItem('tasks', updatedTasksList);
+};
+
+const handleShow = (mode, task) => {
+   addEditMode.value = mode;
+   currentTask.value = task;
+   showModal.value = true;
+};
+
+const toggleModalVisibility = () => {
+   showModal.value = !showModal.value;
+   if (!showModal.value) {
+     currentTask.value = null;
+   }
+};
+
+const handleFilterChange = (e) => {
+   filterType.value = e.target.value;
+};
+
+const addTask = (newTask) => {
+   tasks.value.push(newTask);
+   const updatedTasksList = JSON.stringify(tasks.value);
+   localStorage.setItem('tasks', updatedTasksList);
+};
+
+const editItemModal = (currentTaskId) => {
+   const task = tasks.value.find(task => task.id === currentTaskId);
+   if (task) {
+     handleShow('Edit', task);
+   } else {
+     console.error(`Task with id ${currentTaskId} not found`);
+   }
+};
+
+const editTask = (currentTaskId, updatedTask) => {
+   const index = tasks.value.findIndex(task => task.id === currentTaskId);
+   if (index !== -1) {
+     tasks.value.splice(index, 1, updatedTask);
+   }
+   const updatedTasksList = JSON.stringify(tasks.value);
+   localStorage.setItem('tasks', updatedTasksList);
+};
+
+const deleteTask = (currentTaskId) => {
+   tasks.value = tasks.value.filter(task => task.id !== currentTaskId);
+   const updatedTasksList = JSON.stringify(tasks.value);
+   localStorage.setItem('tasks', updatedTasksList);
+};
+
+const loadDefaultTasks = (event = null) => {
+   if (event && !confirm('Load default tasks?')) { return false; }
+
+   const defaultTasks = [
+     { id: 1, text: "Edit item   - watch out for long text lines that wrap", duedate: "2099-01-01 12:00", completed: true, position: 1 },
+     { id: 2, text: "Add todo item", duedate: "", completed: true, position: 2 },
+     { id: 3, text: "Delete todo item", duedate: "", completed: true, position: 3 },
+     { id: 4, text: "localStorage save/read of todo items", duedate: "", completed: true, position: 4 },
+     { id: 5, text: "Drag and drop reordering of todo items", duedate: "2024-08-01 12:00", completed: false, position: 5 }
+   ];
+
+   const updatedTasksList = JSON.stringify(defaultTasks);
+   localStorage.setItem('tasks', updatedTasksList);
+   tasks.value = defaultTasks;
+
+    return defaultTasks;
+};
+
+// Lifecycle hooks
+onMounted(() => {
+   const storedTasks = localStorage.getItem('tasks');
+   if (storedTasks) {
+     tasks.value = JSON.parse(storedTasks);
+   } else {
+     tasks.value = loadDefaultTasks();
+   }
+});
+</script>
+
+
+<!-- regular <script> version -->
+<!--  
 <script>
 import draggable from 'vuedraggable';
 
@@ -365,6 +500,8 @@ export default {
    }
 };
 </script>
+-->
+
 
 <style>
 /* App.css */
