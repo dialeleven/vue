@@ -22,7 +22,7 @@ Project demo has been deployed to Netlify at **[https://vue-todo-app8.netlify.ap
 - [x] Autofocus text input
 - [x] Handle Enter key
 - [x] Deploy project online (e.g Netlify)
-- [ ] <script setup> version for all components vs <script>
+- [x] <script setup> version for all components vs <script>
 
 ## Recommended IDE Setup
 
